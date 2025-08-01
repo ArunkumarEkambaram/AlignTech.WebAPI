@@ -1,0 +1,6 @@
+@AlignTech.WebAPI.Day1_HostAddress = http://localhost:5028
+
+GET {{AlignTech.WebAPI.Day1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
