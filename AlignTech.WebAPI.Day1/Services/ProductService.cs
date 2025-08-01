@@ -13,13 +13,14 @@ namespace AlignTech.WebAPI.Day1.Services
             {
                 new Product{ Id = 1, Name="Mouse", Description= "Logitech Wireless Mouse", UnitPrice=5500, QuantityAvailable=50, AddedDate= new DateTime()},
                 new Product{ Id = 2, Name="WebCam", Description= "Lenovo Webcam", UnitPrice=2800, QuantityAvailable=150, AddedDate= new DateTime()},
-                new Product{ Id = 3, Name="Speaker", Description= "Logitech Speaker", UnitPrice=1800, QuantityAvailable=25, AddedDate= new DateTime()},
+                new Product{ Id = 3, Name="Speaker", Description= "Logitech Speaker", UnitPrice=1800, QuantityAvailable=0, AddedDate= new DateTime()},
             };
         }
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<Product> GetProducts(bool? inStock)
         {
-            return _products;
+            var result = inStock == true ? _products.Where(p => p.StockAvailablility == inStock) : _products;
+            return result;
         }
 
         public Product? GetProductById(int id)

@@ -16,17 +16,22 @@ namespace AlignTech.WebAPI.Day1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] bool? inStock)
         {
-            var products = _productService.GetProducts();
+            var products = _productService.GetProducts(inStock);
             return Ok(products);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetProduct(int id)
+        [HttpGet("GetId/{id?}")]
+        //GET : localhost:123/api/Products/GetId/
+        public IActionResult GetProduct(int? id)
         {
-            var product = _productService.GetProductById(id);
-            if(product == null)
+            if (!id.HasValue)
+            {
+                return BadRequest("Id cannot be null");
+            }
+            var product = _productService.GetProductById(id.Value);
+            if (product == null)
             {
                 return NotFound();
             }
