@@ -22,13 +22,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/Greet", ()=>"Hello World!");
+//app.MapGet("/Greet", ()=>"Hello World!");
 
-app.Use((context, next) =>
-{
-    app.Logger.LogInformation($"Request Path :{context.Request.Path}");
-    return next();
-});
+//app.Use((context, next) =>
+//{
+//    app.Logger.LogInformation($"Request Path :{context.Request.Path}");
+//    return next();
+//});
 
 app.UseHttpsRedirection();
 

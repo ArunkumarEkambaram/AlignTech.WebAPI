@@ -31,7 +31,11 @@ namespace AlignTech.WebAPI.Day1.Services
 
         public Product AddProduct(Product product)
         {
-            throw new NotImplementedException();
+            var id = _products.Max(x => x.Id) + 1;
+            var newProduct = product;
+            newProduct.Id = id;
+            _products.Add(newProduct);
+            return newProduct;
         }
 
         public Product? DeleteProduct(int id)

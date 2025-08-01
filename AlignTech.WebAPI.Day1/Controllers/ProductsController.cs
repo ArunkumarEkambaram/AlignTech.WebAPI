@@ -1,4 +1,5 @@
 ﻿using AlignTech.WebAPI.Day1.Interfaces;
+using AlignTech.WebAPI.Day1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,5 +38,23 @@ namespace AlignTech.WebAPI.Day1.Controllers
             }
             return Ok(product);
         }
+
+        [HttpPost("AddProduct")]
+        public IActionResult Post([FromBody]Product product)
+        {
+            var result =_productService.AddProduct(product);
+            if (result.Id != 0)
+            {
+               // return CreatedAtRoute("AddProduct", product);
+               return Ok(result);
+            }
+            return BadRequest();
+        }
+
+        //[HttpPut("UpdateProduct/{id}")]
+        //public IActionResult Put(int id, [FromBody] Product product)
+        //{
+
+        //}
     }
 }
