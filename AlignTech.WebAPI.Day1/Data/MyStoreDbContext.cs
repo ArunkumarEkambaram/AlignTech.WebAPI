@@ -13,6 +13,8 @@ namespace AlignTech.WebAPI.Day1.Data
         //Table Info
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         //Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

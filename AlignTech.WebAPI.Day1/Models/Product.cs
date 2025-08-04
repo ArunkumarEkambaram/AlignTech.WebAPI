@@ -10,5 +10,11 @@
         public bool StockAvailablility => QuantityAvailable > 0;
         public DateTime AddedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+
+        //Reference Category
+        public Category? Category { get; set; }
+
+        //Naming convention for Creating Foreign Key (TableNameId or TableName_Id)
+        public int? CategoryId { get; set; }
     }
 }
