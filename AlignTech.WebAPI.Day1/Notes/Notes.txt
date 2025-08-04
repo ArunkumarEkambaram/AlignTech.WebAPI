@@ -1,0 +1,29 @@
+﻿
+Step 1:
+//Packages need to be added
+EntityFrameworkCore
+EntityFrameworkCore.SqlServer
+EntityFrameworkCore.Tools
+
+Step 2:
+ConnectionString in appSettings.json
+
+Step3:
+MyStoreDbContext:dbContext
+
+Step 4:
+OnModelCreating(modelBuilder)
+//Restriction applied to DB
+
+Step 5:
+PMC
+PM>add-migration <nameof migration>
+PM>Update-database or Remove-migration
+
+Connection String Format
+Data Source=EGAIK-PC; Initial Catalog = MyStoreDB; User Id=<username>; Password=<password>;Connect Timeout=30;;Trust Server Certificate=True; //Sql Authentication
+or
+Data Source=EGAIK-PC; Initial Catalog = MyStoreDB; Integrated Security=True;Connect Timeout=30;;Trust Server Certificate=True; //Windows Authentication
+
+Data Source = Serve Name
+Initial Catalog = DB Name

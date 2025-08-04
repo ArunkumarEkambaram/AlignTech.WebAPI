@@ -1,5 +1,7 @@
+using AlignTech.WebAPI.Day1.Data;
 using AlignTech.WebAPI.Day1.Interfaces;
 using AlignTech.WebAPI.Day1.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Resolve DI
+builder.Services.AddDbContext<MyStoreDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("MyStoreConnection")));
+
 builder.Services.AddSingleton<IProductService, ProductService>();
+
+
 
 var app = builder.Build();
 
@@ -22,17 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.MapGet("/Greet", ()=>"Hello World!");
-
-//app.Use((context, next) =>
-//{
-//    app.Logger.LogInformation($"Request Path :{context.Request.Path}");
-//    return next();
-//});
-
 app.UseHttpsRedirection();
-
-//app.UseRouting();
 
 //app.UseAuthorization();
 
