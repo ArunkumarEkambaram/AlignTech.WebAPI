@@ -1,0 +1,15 @@
+﻿Data First Approach
+
+Used to Fetch Table  to Application
+
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+
+ConnectionStrings
+
+Data Source=EGAIK-PC;Initial Catalog=QuickKartDB;Integrated Security=True;Connect Timeout=30;Trust Server Certificate=True;
+
+Scaffold-DbContext "Name=ConnectionStrings:MyConn" Microsoft.EntityFrameworkCore.SqlServer -ContextDir Data -OutputDir Models -tables CardDetails, Products, Categories, Employees 
+
+https://learn.microsoft.com/en-us/ef/core/managing-schemas/scaffolding/?tabs=vs --Scaffolding Syntax

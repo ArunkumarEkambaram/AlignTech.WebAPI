@@ -1,50 +1,90 @@
-﻿using AlignTech.WebAPI.Day1.Interfaces;
+﻿using AlignTech.WebAPI.Day1.Data;
+using AlignTech.WebAPI.Day1.DTOs;
+using AlignTech.WebAPI.Day1.Interfaces;
 using AlignTech.WebAPI.Day1.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlignTech.WebAPI.Day1.Services
 {
     public class ProductService : IProductService
     {
-        private readonly List<Product> _products;
+        private readonly MyStoreDbContext _dbContext;
 
-        public ProductService()
+        public ProductService(MyStoreDbContext dbContext)
         {
-            _products = new List<Product>
+            _dbContext = dbContext;
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetProducts(bool? inStock)
+        {
+            var products = await _dbContext.Products.Include(p => p.Category).ToListAsync();
+
+            if (inStock == true)
             {
-                new Product{ Id = 1, Name="Mouse", Description= "Logitech Wireless Mouse", UnitPrice=5500, QuantityAvailable=50, AddedDate= new DateTime()},
-                new Product{ Id = 2, Name="WebCam", Description= "Lenovo Webcam", UnitPrice=2800, QuantityAvailable=150, AddedDate= new DateTime()},
-                new Product{ Id = 3, Name="Speaker", Description= "Logitech Speaker", UnitPrice=1800, QuantityAvailable=0, AddedDate= new DateTime()},
+                products = products.Where(x => x.StockAvailablility == true).ToList();
+            }
+
+            //Store product to ProductDto
+            var productDto = products.Select(p => new ProductDto
+            {
+                ProductName = p.Name,
+                CategoryName = p.Category.Name,
+                Description = p.Description,
+                IsInStock = p.StockAvailablility,
+                Price = p.UnitPrice,
+                Quantity = p.QuantityAvailable,
+                AddedDate = p.AddedDate
+            }).ToList();
+
+            return productDto;
+        }
+
+        public async Task<ProductDto?> GetProductById(int id)
+        {
+            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return null;
+            }
+            var productDto = new ProductDto
+            {
+                ProductName = product.Name ?? string.Empty,
+                Description = product.Description,
+                Price = product.UnitPrice,
+                Quantity = product.QuantityAvailable,
+                AddedDate = product.AddedDate,
+                CategoryName = product.Category?.Name ?? string.Empty,
+                IsInStock = product.StockAvailablility,
             };
+            return productDto;
         }
 
-        public IEnumerable<Product> GetProducts(bool? inStock)
+        public async Task<Product> AddProduct(AddUpdateProductDto product)
         {
-            var result = inStock == true ? _products.Where(p => p.StockAvailablility == inStock) : _products;
-            return result;
-        }
+            //Convert DTO to Entity
+            var newProduct = new Product
+            {
+                Name = product.ProductName ?? string.Empty,
+                Description = product.Description,
+                UnitPrice = product.Price,
+                QuantityAvailable = product.Quantity,
+                CategoryId = product.CategoryId
+            };
 
-        public Product? GetProductById(int id)
-        {
-            var product = _products.FirstOrDefault(p => p.Id == id);
-            return product;
-        }
+            _dbContext.Products.Add(newProduct);//Temp Adding Product
+            await _dbContext.SaveChangesAsync();//Apply to DB
 
-        public Product AddProduct(Product product)
-        {
-            var id = _products.Max(x => x.Id) + 1;
-            var newProduct = product;
-            newProduct.Id = id;
-            _products.Add(newProduct);
             return newProduct;
         }
 
-        public Product? DeleteProduct(int id)
+        public Task<ProductDto?> DeleteProduct(int id)
         {
             throw new NotImplementedException();
         }
 
 
-        public Product? UpdateProduct(int id, Product product)
+
+        public Task<ProductDto?> UpdateProduct(int id, AddUpdateProductDto product)
         {
             throw new NotImplementedException();
         }

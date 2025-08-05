@@ -1,4 +1,5 @@
-﻿using AlignTech.WebAPI.Day1.Interfaces;
+﻿using AlignTech.WebAPI.Day1.DTOs;
+using AlignTech.WebAPI.Day1.Interfaces;
 using AlignTech.WebAPI.Day1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,21 +18,21 @@ namespace AlignTech.WebAPI.Day1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] bool? inStock)
+        public async Task<IActionResult> Get([FromQuery] bool? inStock)
         {
-            var products = _productService.GetProducts(inStock);
+            var products = await _productService.GetProducts(inStock);
+            if (products == null)
+            {
+                return NotFound();
+            }
             return Ok(products);
         }
 
-        [HttpGet("GetId/{id?}")]
-        //GET : localhost:123/api/Products/GetId/
-        public IActionResult GetProduct(int? id)
+        [HttpGet("{id}", Name = "GetProduct")]
+        //GET : localhost:123/api/Products/GetProduct/{id}
+        public async Task<IActionResult> GetProduct(int id)
         {
-            if (!id.HasValue)
-            {
-                return BadRequest("Id cannot be null");
-            }
-            var product = _productService.GetProductById(id.Value);
+            var product = await _productService.GetProductById(id);
             if (product == null)
             {
                 return NotFound();
@@ -40,15 +41,10 @@ namespace AlignTech.WebAPI.Day1.Controllers
         }
 
         [HttpPost("AddProduct")]
-        public IActionResult Post([FromBody]Product product)
+        public async Task<IActionResult> CreateProduct([FromBody] AddUpdateProductDto product)
         {
-            var result =_productService.AddProduct(product);
-            if (result.Id != 0)
-            {
-               // return CreatedAtRoute("AddProduct", product);
-               return Ok(result);
-            }
-            return BadRequest();
+            var newProduct = await _productService.AddProduct(product);
+            return CreatedAtRoute("GetProduct", new { id = newProduct.Id }, newProduct);//RouteName, RouteValue, Model
         }
 
         //[HttpPut("UpdateProduct/{id}")]

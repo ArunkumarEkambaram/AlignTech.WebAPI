@@ -1,6 +1,27 @@
-@AlignTech.WebAPI.Day1_HostAddress = http://localhost:5028
+@AlignTech.WebAPI.Day1_HostAddress = https://localhost:7295
 
 GET {{AlignTech.WebAPI.Day1_HostAddress}}/weatherforecast/
 Accept: application/json
 
+###
+
+GET {{AlignTech.WebAPI.Day1_HostAddress}}/api/products
+
+###
+
+@id=2
+GET {{AlignTech.WebAPI.Day1_HostAddress}}/api/products/{{id}}
+
+###
+
+POST {{AlignTech.WebAPI.Day1_HostAddress}}/api/products/AddProduct
+Content-Type: application/json
+
+{
+  "productName": "Pen Holder",
+  "description": "New Pen Holder",
+  "price": 50,
+  "quantity": 500,
+  "categoryId": 3
+}
 ###

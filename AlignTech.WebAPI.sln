@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36212.18 d17.14
+VisualStudioVersion = 17.14.36212.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlignTech.WebAPI.Day1", "AlignTech.WebAPI.Day1\AlignTech.WebAPI.Day1.csproj", "{B6535C5D-4F9F-4280-96E0-6D4C21811245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlignTech.WebAPI.DataFirst", "AlignTech.WebAPI.DataFirst\AlignTech.WebAPI.DataFirst.csproj", "{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B6535C5D-4F9F-4280-96E0-6D4C21811245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6535C5D-4F9F-4280-96E0-6D4C21811245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6535C5D-4F9F-4280-96E0-6D4C21811245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

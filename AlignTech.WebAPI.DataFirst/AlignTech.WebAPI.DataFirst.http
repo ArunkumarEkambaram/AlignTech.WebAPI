@@ -1,0 +1,25 @@
+@AlignTech.WebAPI.DataFirst_HostAddress = https://localhost:7123
+
+
+
+GET {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products
+
+###
+
+@id=P999
+GET {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products/{{id}}
+
+###
+
+POST {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "productId": "P164",
+  "productName": "iPhone 17",
+  "categoryId": 1,
+  "price": 79999,
+  "quantityAvailable": 10
+}
+
+###

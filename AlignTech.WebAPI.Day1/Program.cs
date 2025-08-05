@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 //Resolve DI
 builder.Services.AddDbContext<MyStoreDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("MyStoreConnection")));
 
-builder.Services.AddSingleton<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 
