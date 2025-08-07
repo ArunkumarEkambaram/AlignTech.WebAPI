@@ -13,3 +13,26 @@ Data Source=EGAIK-PC;Initial Catalog=QuickKartDB;Integrated Security=True;Connec
 Scaffold-DbContext "Name=ConnectionStrings:MyConn" Microsoft.EntityFrameworkCore.SqlServer -ContextDir Data -OutputDir Models -tables CardDetails, Products, Categories, Employees 
 
 https://learn.microsoft.com/en-us/ef/core/managing-schemas/scaffolding/?tabs=vs --Scaffolding Syntax
+
+StoredProcedure
+1. FromSqlRaw(EXEC uspGetProduct +productId)
+2. FromSqlInterpolated
+3. ExecuteSqlRaw - Insert, Update or Delete
+3. ExecuteSqlInterpolated - Insert, Update or Delete
+
+go
+Create Proc usp_GetProductCategory(@CategoryId tinyint)
+as
+Select ProductName, Price, QuantityAvailable, c.CategoryId, CategoryName from Products p, Categories c Where p.CategoryId=c.CategoryId and c.CategoryId=@CategoryId
+
+exec usp_GetProductCategory 4
+
+2. Dto
+
+3. Register Dto in DbContext
+
+4. _dbContext.Dto.FromSqlInterpolated - Repository
+
+5. Implement Service
+
+6. Call in Controller

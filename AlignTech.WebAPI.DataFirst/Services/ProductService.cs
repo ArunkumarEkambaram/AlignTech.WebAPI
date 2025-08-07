@@ -64,13 +64,19 @@ namespace AlignTech.WebAPI.DataFirst.Services
             var productDto = products.Select(p => new ProductDto
             {
                 ProductName = p.ProductName,
-               // CategoryName = p.Category.CategoryName,
+                CategoryName = p.Category.CategoryName,
                 Id = p.ProductId,
                 Price = p.Price,
                 Quantity = p.QuantityAvailable
             }).ToList();
 
             return productDto;
+        }
+
+        public async Task<IEnumerable<ProductAndCategoryDto>> GetProductsAndCategories(short categoryId)
+        {
+            var productCategoryDto = await _repository.GetProductByCategory(categoryId);
+            return productCategoryDto;
         }
     }
 }

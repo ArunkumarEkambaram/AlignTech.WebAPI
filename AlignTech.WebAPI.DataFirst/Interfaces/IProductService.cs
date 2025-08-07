@@ -9,5 +9,7 @@ namespace AlignTech.WebAPI.DataFirst.Interfaces
         Task<ProductDto> GetProduct(string id);
 
         Task<ProductDto> AddProduct(AddProductDto addProductDto);
+
+        Task<IEnumerable<ProductAndCategoryDto>> GetProductsAndCategories(short categoryId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AlignTech.WebAPI.DataFirst.Configurations;
+using AlignTech.WebAPI.DataFirst.DTOs;
 using AlignTech.WebAPI.DataFirst.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,11 +18,20 @@ public partial class QuickKartDbContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public DbSet<ProductAndCategoryDto> ProductAndCategoryDto { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new CardDetailConfiguration());        
+        modelBuilder.ApplyConfiguration(new CardDetailConfiguration());
+
+        //Configuring ProductCategoryDto
+        modelBuilder.Entity<ProductAndCategoryDto>(x => x
+        .HasNoKey() //There is no Primary Key
+        .ToView(null)//No View
+        .Property("Quantity").HasColumnName("QuantityAvailable")
+        );
     }
 
 }

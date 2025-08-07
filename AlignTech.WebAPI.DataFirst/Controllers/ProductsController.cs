@@ -46,12 +46,22 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             var product = await _productService.AddProduct(productDto);
             if (product != null)
             {
-              //  return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
-              return Ok(product);
+                return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+                // return Ok(product);
             }
             return NotFound();
         }
 
+        [HttpGet("{categoryId}", Name = "GetProductByCategory")]
+        public async Task<IActionResult> GetProductByCategory(short categoryId)
+        {
+            var productCategory = await _productService.GetProductsAndCategories(categoryId);
+            if (productCategory.Any())
+            {
+                return Ok(productCategory);
+            }
+            return NotFound(new { message = $"Category Id {categoryId} not found." });
+        }
     }
 }
 
