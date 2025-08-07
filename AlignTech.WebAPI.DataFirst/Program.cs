@@ -1,5 +1,6 @@
 using AlignTech.WebAPI.DataFirst.Data;
 using AlignTech.WebAPI.DataFirst.Interfaces;
+using AlignTech.WebAPI.DataFirst.Mappings;
 using AlignTech.WebAPI.DataFirst.Repositories;
 using AlignTech.WebAPI.DataFirst.Services;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 //Relsove Service
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddAutoMapper(typeof(ProductProfiling));
 
 var app = builder.Build();
 

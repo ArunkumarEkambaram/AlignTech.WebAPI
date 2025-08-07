@@ -36,3 +36,12 @@ exec usp_GetProductCategory 4
 5. Implement Service
 
 6. Call in Controller
+
+//To Implement AutoMapper
+1) AutoMapper.Extension.Microsoft.DependencyInjection
+
+2) ProductProfiling class inherit Profile
+
+3) builder.Services.AddAutoMapper(typeof(ProductProfiling)); in Program.cs
+
+4) Implement the mapping in Service
