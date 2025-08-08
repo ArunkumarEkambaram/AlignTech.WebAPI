@@ -2,6 +2,7 @@
 using AlignTech.WebAPI.DataFirst.DTOs;
 using AlignTech.WebAPI.DataFirst.Interfaces;
 using AlignTech.WebAPI.DataFirst.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlignTech.WebAPI.DataFirst.Repositories
@@ -40,7 +41,10 @@ namespace AlignTech.WebAPI.DataFirst.Repositories
 
         public async Task<IEnumerable<ProductAndCategoryDto>> GetProductByCategory(short categoryId)
         {
-            var result = await _dbContext.ProductAndCategoryDto.FromSqlInterpolated($"EXEC usp_GetProductCategory {categoryId}").ToListAsync();            
+            var catId = new SqlParameter("@CategoryId", System.Data.SqlDbType.TinyInt);
+            catId.Value = categoryId;
+            var result = _dbContext.ProductAndCategoryDto.FromSqlRaw("EXEC usp_GetProductCategory", catId);
+            //var result = await _dbContext.ProductAndCategoryDto.FromSqlInterpolated($"EXEC usp_GetProductCategory {categoryId}").ToListAsync();            
             return result;
         }
     }

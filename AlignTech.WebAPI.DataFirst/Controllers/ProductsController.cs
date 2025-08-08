@@ -1,6 +1,5 @@
 ﻿using AlignTech.WebAPI.DataFirst.DTOs;
 using AlignTech.WebAPI.DataFirst.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlignTech.WebAPI.DataFirst.Controllers
@@ -19,6 +18,7 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+             //throw new Exception("Base Exception");
             var products = await _productService.GetProducts();
             if (products == null)
             {
@@ -32,6 +32,10 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         [Route("GetProduct/{id}")]
         public async Task<IActionResult> GetProduct(string id)
         {
+            if (id == "P100")
+            {
+                throw new InvalidOperationException($"Product Id {id} is invalid");
+            }
             var product = await _productService.GetProduct(id);
             if (product == null)
             {

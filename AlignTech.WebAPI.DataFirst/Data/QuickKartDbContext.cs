@@ -12,8 +12,6 @@ public partial class QuickKartDbContext : DbContext
     {
     }
 
-    public virtual DbSet<CardDetail> CardDetails { get; set; }
-
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -24,7 +22,6 @@ public partial class QuickKartDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new CardDetailConfiguration());
 
         //Configuring ProductCategoryDto
         modelBuilder.Entity<ProductAndCategoryDto>(x => x

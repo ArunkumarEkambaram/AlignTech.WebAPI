@@ -4,6 +4,9 @@ using AlignTech.WebAPI.DataFirst.Mappings;
 using AlignTech.WebAPI.DataFirst.Repositories;
 using AlignTech.WebAPI.DataFirst.Services;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using AlignTech.WebAPI.DataFirst.Validators;
+using AlignTech.WebAPI.DataFirst.CustomExceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,14 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 //Relsove Service
 builder.Services.AddScoped<IProductService, ProductService>();
 
+//Register AutoMapper
 builder.Services.AddAutoMapper(typeof(ProductProfiling));
+
+//Register Validator
+builder.Services.AddValidatorsFromAssemblyContaining<AddProductDtoValidator>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
@@ -33,6 +43,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//Custom Exception Handler
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

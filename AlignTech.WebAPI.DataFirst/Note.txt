@@ -45,3 +45,7 @@ exec usp_GetProductCategory 4
 3) builder.Services.AddAutoMapper(typeof(ProductProfiling)); in Program.cs
 
 4) Implement the mapping in Service
+
+//Implementing Fluent Validaition --add the following packages
+FluentValidation
+FluentValidation.DependencyInjectionExtensions
