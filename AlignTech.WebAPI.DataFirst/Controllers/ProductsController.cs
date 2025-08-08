@@ -1,6 +1,5 @@
 ﻿using AlignTech.WebAPI.DataFirst.DTOs;
 using AlignTech.WebAPI.DataFirst.Interfaces;
-using AlignTech.WebAPI.DataFirst.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,22 +11,27 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
     {
         private readonly IProductService _productService;
         private readonly IValidator<AddProductDto> _validator;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(IProductService productService, IValidator<AddProductDto> validator)
+        public ProductsController(IProductService productService, IValidator<AddProductDto> validator, ILogger<ProductsController> logger)
         {
             _productService = productService;
             _validator = validator;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-             //throw new Exception("Base Exception");
+            using var _ = _logger.BeginScope("Getting all products");
+           // _logger.LogInformation("Getting all products");
             var products = await _productService.GetProducts();
             if (products == null)
             {
+                _logger.LogWarning("There is nothing in the database to display");
                 return NotFound(new { message = "Product is empty" });
             }
+            _logger.LogInformation("Successfully retrieved all the products");
             return Ok(products);
         }
 
@@ -36,24 +40,32 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         [Route("GetProduct/{id}")]
         public async Task<IActionResult> GetProduct(string id)
         {
+            using var _ = _logger.BeginScope($"Retrieving Product Id :{id}");
+
             if (id == "P100")
             {
+                _logger.LogError("Product Id : P100, cannot be used");
                 throw new InvalidOperationException($"Product Id {id} is invalid");
             }
             var product = await _productService.GetProduct(id);
             if (product == null)
             {
+                _logger.LogWarning($"No product found for Product Id :{id}");
                 return NotFound(new { message = $"Product Id :{id} not found" });
             }
+            _logger.LogInformation($"Successfully retrieved  Product Id :{id}");
             return Ok(product);
         }
 
         [HttpPost(Name = "AddProduct")]
         public async Task<IActionResult> CreateProduct([FromBody] AddProductDto productDto)
         {
+            using var _ = _logger.BeginScope($"Adding New product, Product Name :{productDto.ProductName}");
+
             var result = await _validator.ValidateAsync(productDto);
             if (!result.IsValid)
             {
+                _logger.LogError("Validation Failed");
                 return BadRequest(new
                 {
                     message = "Validation Failed",
@@ -68,9 +80,11 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             var product = await _productService.AddProduct(productDto);
             if (product != null)
             {
+                _logger.LogWarning($"Successfully created a new product, Product Name :{productDto.ProductName}");
                 return CreatedAtAction("GetProduct", new { id = product.Id }, product);
                 // return Ok(product);
             }
+            _logger.LogWarning($"Unable to add new product, Product Name :{productDto.ProductName}");
             return NotFound();
         }
 
