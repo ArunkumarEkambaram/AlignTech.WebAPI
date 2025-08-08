@@ -1,5 +1,7 @@
 ﻿using AlignTech.WebAPI.DataFirst.DTOs;
 using AlignTech.WebAPI.DataFirst.Interfaces;
+using AlignTech.WebAPI.DataFirst.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlignTech.WebAPI.DataFirst.Controllers
@@ -9,10 +11,12 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IValidator<AddProductDto> _validator;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IValidator<AddProductDto> validator)
         {
             _productService = productService;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -47,6 +51,20 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         [HttpPost(Name = "AddProduct")]
         public async Task<IActionResult> CreateProduct([FromBody] AddProductDto productDto)
         {
+            var result = await _validator.ValidateAsync(productDto);
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    message = "Validation Failed",
+                    errors = result.Errors.Select(x => new
+                    {
+                        property = x.PropertyName,
+                        errorMsg = x.ErrorMessage
+                    })
+                });
+            }
+
             var product = await _productService.AddProduct(productDto);
             if (product != null)
             {

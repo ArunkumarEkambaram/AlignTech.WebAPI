@@ -47,5 +47,12 @@ exec usp_GetProductCategory 4
 4) Implement the mapping in Service
 
 //Implementing Fluent Validaition --add the following packages
+1)
 FluentValidation
 FluentValidation.DependencyInjectionExtensions
+
+2) Create Validator Class
+
+3) Register Validator in Program.cs
+
+4) Implement Validation login in Controller

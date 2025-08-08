@@ -32,6 +32,7 @@ builder.Services.AddAutoMapper(typeof(ProductProfiling));
 //Register Validator
 builder.Services.AddValidatorsFromAssemblyContaining<AddProductDtoValidator>();
 
+//Register GlobalException Handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 

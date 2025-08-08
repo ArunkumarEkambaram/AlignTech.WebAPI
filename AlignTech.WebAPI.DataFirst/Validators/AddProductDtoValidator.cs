@@ -8,8 +8,8 @@ namespace AlignTech.WebAPI.DataFirst.Validators
         public AddProductDtoValidator()
         {
             RuleFor(p => p.ProductId)
-                .NotEmpty().WithMessage("Product Id cannot be empty")
-                .Must(p => p.StartsWith("P")).WithMessage("Product Id must starts with 'P'");
+                .NotEmpty().WithMessage("Product Id cannot be empty")                
+                .Matches(@"[P]{1}\d{3}$").WithMessage("Product Id should starts with P and followed by 3 digits");
 
             RuleFor(p => p.ProductName)
                 .NotEmpty().WithMessage("Product Name cannot be blank")
@@ -20,8 +20,8 @@ namespace AlignTech.WebAPI.DataFirst.Validators
                 .GreaterThan(0).WithMessage("Price must be greater than or equal to 1");
 
             RuleFor(p => p.QuantityAvailable)
-                .InclusiveBetween(1, 10)
-                .WithMessage("Quantity should be between 1 and 10");
+                .InclusiveBetween(1, 1000)
+                .WithMessage("Quantity should be between 1 and 1000");
 
             RuleFor(p => p.CategoryId)
                .Must(id => !id.HasValue || (id.Value > 0 && id.Value <= 255))
