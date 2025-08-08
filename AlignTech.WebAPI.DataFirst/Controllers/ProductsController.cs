@@ -21,6 +21,8 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
             using var _ = _logger.BeginScope("Getting all products");
@@ -35,9 +37,11 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             return Ok(products);
         }
 
-        // [HttpGet("{id}", Name = "GetProduct")]
+
         [HttpGet]
         [Route("GetProduct/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProduct(string id)
         {
             using var _ = _logger.BeginScope($"Retrieving Product Id :{id}");
@@ -57,7 +61,11 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             return Ok(product);
         }
 
+   
         [HttpPost(Name = "AddProduct")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateProduct([FromBody] AddProductDto productDto)
         {
             using var _ = _logger.BeginScope($"Adding New product, Product Name :{productDto.ProductName}");
@@ -82,7 +90,6 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             {
                 _logger.LogWarning($"Successfully created a new product, Product Name :{productDto.ProductName}");
                 return CreatedAtAction("GetProduct", new { id = product.Id }, product);
-                // return Ok(product);
             }
             _logger.LogWarning($"Unable to add new product, Product Name :{productDto.ProductName}");
             return NotFound();
