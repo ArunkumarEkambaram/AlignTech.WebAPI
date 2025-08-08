@@ -1,0 +1,250 @@
+Add Package - Microsoft.AspNetCore.Authentication.JwtBearer
+For Web API 8 install above package version 8
+
+1) Create User Model
+  public class User
+  {
+      public Guid Id { get; set; }
+      public  string Name { get; set; } = string.Empty;
+      public  string Username { get; set; } = string.Empty;
+      public string PasswordHash { get; set; } = string.Empty;
+  }
+
+2) Add User Model in DbContext and Create Migration
+
+3) Create 2 class RegisterDto and UserDto
+  public class UserDto
+  {
+      public string Username { get; set; } = string.Empty;
+      public string Password { get; set; } = string.Empty;
+  }
+  public class RegisterUserDto : UserDto
+  {
+      public string Name { get; set; } = string.Empty;
+  }
+
+4) Add Jwt Settings in appSettings.json
+//Jwt Token Authentication Settings
+"AppSettings": {
+  "token": "a-string-secret-at-least-256-bits-long",
+  "issuer": "DataFirstApproach",
+  "audience": "DataFirstApproach"
+}
+
+5) Create an interface and class for Token Service - This class is used to generate token
+  public interface ITokenService
+  {
+      string GenerateToken(User user);
+  }
+
+public class TokenService(IConfiguration configuration) : ITokenService
+{
+    public string GenerateToken(User user)
+    {
+        var key = Encoding.UTF8.GetBytes(configuration["AppSettings:Token"]!);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(
+                [
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                ]),
+            Expires = DateTime.UtcNow.AddDays(1),
+            Issuer = configuration["AppSettings:issuer"],
+            Audience = configuration["AppSettings:audience"],
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var result = tokenHandler.WriteToken(token);
+        return tokenHandler.WriteToken(token);
+    }
+}
+
+6) Create Interface for Repository and Implement Repository Class
+ public interface IAuthRepository
+ {
+     Task<User> RegisterAsync(User user);
+
+     Task<User> LoginAsync(string userName);
+ }
+
+public class AuthRepository(QuickKartDbContext dbContext) : IAuthRepository
+{
+    public async Task<User> LoginAsync(string userName)
+    {
+        var result = await dbContext.UserTable.SingleOrDefaultAsync(u => u.Username == userName);
+        return result ?? null!;
+    }
+
+    public async Task<User> RegisterAsync(User user)
+    {
+        var result = await dbContext.UserTable.AnyAsync(u => u.Username == user.Username);
+        if (result)
+        {
+            return null!;
+        }
+        dbContext.UserTable.Add(user);
+        await dbContext.SaveChangesAsync();
+        return user;
+    }
+}
+
+7) Create interface and Service for IAuthService and AuthService
+ public interface IAuthService
+ {
+     Task<User> RegisterAsync(RegisterUserDto registerUserDto);
+
+     Task<string> LoginAsync(UserDto loginDto);
+ }
+
+public class AuthService : IAuthService
+{
+    private readonly IAuthRepository _authRepository;
+    private readonly ITokenService _tokenService;
+
+    public AuthService(IAuthRepository authRepository, ITokenService tokenService)
+    {
+        _authRepository = authRepository;
+        _tokenService = tokenService;
+    }
+
+    public async Task<string> LoginAsync(UserDto loginDto)
+    {
+        var userData = await _authRepository.LoginAsync(loginDto.Username);
+        if (userData == null)
+        {
+            return null!;
+        }
+        if (new PasswordHasher<User>().VerifyHashedPassword(userData, userData.PasswordHash, loginDto.Password) == PasswordVerificationResult.Failed)
+        {
+            return null!;
+        }
+
+        //if username and password are valid, generate token
+        return _tokenService.GenerateToken(userData);
+    }
+
+    public async Task<User> RegisterAsync(RegisterUserDto registerUserDto)
+    {
+        var user = new User
+        {
+            Name = registerUserDto.Name,
+            Username = registerUserDto.Username
+        };
+
+        var hashedPassword = new PasswordHasher<User>().HashPassword(user, registerUserDto.Password);
+        user.PasswordHash = hashedPassword;
+
+        var registeredUser = await _authRepository.RegisterAsync(user);
+        if (registeredUser == null)
+        {
+            return null!;
+        }
+
+        return registeredUser;
+    }
+}
+
+8) Create Controller
+public class AuthController : ControllerBase
+{
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterUserDto registerUserDto)
+    {
+        var user = await _authService.RegisterAsync(registerUserDto);
+        if (user == null)
+        {
+            return BadRequest(new { message = "Username already exists" });
+        }
+        return Ok(user);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(UserDto userDto)
+    {
+        var userToken = await _authService.LoginAsync(userDto);
+        if (string.IsNullOrWhiteSpace(userToken))
+        {
+            return BadRequest(new { message = "Either username or password are incorrect." });
+        }
+        return Ok(userToken);
+    }
+}
+
+9) Create an action method add [Authorize] attribute
+
+10) Add AuthenticationScheme in Program.cs
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["AppSettings:Audience"],
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+        ValidateIssuerSigningKey = true
+    };
+});
+
+-------- Add Role
+1) Modify User - add an property Role and run the migration again, insert role for the existing user in sql server
+
+2) Add attribute [Authorize="Admin"]
+
+3) Modify Token Service class and add new claim types "Role" and provide Role property
+
+--- Implementing CORS
+CORS (Cross-Origin Resource Sharing) is a browser security feature that restricts web applications from making requests to a domain different from the one that served the web page. It’s essential when your frontend (e.g., Angular, React) and backend (e.g., ASP.NET Core Web API) are hosted on different domains or ports.
+
+Without CORS, browsers block cross-origin HTTP requests for security reasons. CORS allows servers to specify who can access their resources and how.
+
+add the following in Program.cs
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin() //in real-time provide necessary url here
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+app.UseCors("AllowAll");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,12 +16,15 @@ public partial class QuickKartDbContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public DbSet<User>  UserTable { get; set; }
+
     public DbSet<ProductAndCategoryDto> ProductAndCategoryDto { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
 
         //Configuring ProductCategoryDto
         modelBuilder.Entity<ProductAndCategoryDto>(x => x

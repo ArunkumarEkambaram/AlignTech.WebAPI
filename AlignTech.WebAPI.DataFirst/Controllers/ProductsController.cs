@@ -1,6 +1,7 @@
 ﻿using AlignTech.WebAPI.DataFirst.DTOs;
 using AlignTech.WebAPI.DataFirst.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlignTech.WebAPI.DataFirst.Controllers
@@ -61,7 +62,8 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             return Ok(product);
         }
 
-   
+
+        [Authorize]
         [HttpPost(Name = "AddProduct")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
