@@ -9,6 +9,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -84,6 +85,27 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+//Configure CORS Policy
+builder.Services.AddCors(options =>
+{
+    //MVC
+    options.AddPolicy("MVCApp", option =>
+    {
+        //option.AllowAnyOrigin();
+        option.WithOrigins("https://localhost:7119");
+        option.AllowAnyHeader();
+        option.AllowAnyMethod();
+    });
+
+    //Angular
+    options.AddPolicy("AngularApp", opt =>
+    {
+        opt.WithOrigins("https://localhost:7200/");
+        opt.AllowAnyHeader();
+        opt.WithMethods("GET");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -100,5 +122,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("MVCApp");
+//app.UseCors("AngularApp");
 
 app.Run();
