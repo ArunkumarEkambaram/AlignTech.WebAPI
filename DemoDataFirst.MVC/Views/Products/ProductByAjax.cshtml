@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Product List</h2>
+<div id="product-container">Loading...</div>
+
+<script>
+    fetch("https://localhost:7123/api/Products")
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.json();
+        })
+        .then(products => {
+            const container = document.getElementById("product-container");
+            container.innerHTML = "";
+            console.log(products);
+            products.forEach(p => {
+                const item = document.createElement("div");
+                item.innerHTML = `<strong>${p.productName}</strong> - ₹${p.price}`;
+                container.appendChild(item);
+            });
+        })
+        .catch(error => {
+            document.getElementById("product-container").innerText = "Failed to load products.";
+            console.error("Error fetching products:", error);
+        });
+</script>

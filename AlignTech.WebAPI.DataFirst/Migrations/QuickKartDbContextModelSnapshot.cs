@@ -119,6 +119,10 @@ namespace AlignTech.WebAPI.DataFirst.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -129,6 +133,33 @@ namespace AlignTech.WebAPI.DataFirst.Migrations
                     b.ToTable("UserTable");
                 });
 
+            modelBuilder.Entity("AlignTech.WebAPI.DataFirst.Models.UserSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionPlan")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSubscriptions");
+                });
+
             modelBuilder.Entity("AlignTech.WebAPI.DataFirst.Models.Product", b =>
                 {
                     b.HasOne("AlignTech.WebAPI.DataFirst.Models.Category", "Category")
@@ -137,6 +168,17 @@ namespace AlignTech.WebAPI.DataFirst.Migrations
                         .HasConstraintName("fk_CategoryId");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("AlignTech.WebAPI.DataFirst.Models.UserSubscription", b =>
+                {
+                    b.HasOne("AlignTech.WebAPI.DataFirst.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AlignTech.WebAPI.DataFirst.Models.Category", b =>

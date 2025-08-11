@@ -8,6 +8,7 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -21,13 +22,14 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
             using var _ = _logger.BeginScope("Getting all products");
-           // _logger.LogInformation("Getting all products");
+            // _logger.LogInformation("Getting all products");
             var products = await _productService.GetProducts();
             if (products == null)
             {
@@ -39,6 +41,7 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("GetProduct/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -63,7 +66,7 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "seller, admin")]
         [HttpPost(Name = "AddProduct")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

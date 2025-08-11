@@ -6,8 +6,12 @@ using AlignTech.WebAPI.DataFirst.Repositories;
 using AlignTech.WebAPI.DataFirst.Services;
 using AlignTech.WebAPI.DataFirst.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +40,23 @@ builder.Services.AddValidatorsFromAssemblyContaining<AddProductDtoValidator>();
 //Register GlobalException Handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+//Authentication Scheme - JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["AppSettings:issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["AppSettings:audience"],
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:token"]!)),
+        ValidateIssuerSigningKey = true
+    };
+});
+
+
 
 //Register Serilog Configuration
 Log.Logger = new LoggerConfiguration()

@@ -11,15 +11,31 @@ GET {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products/{{id}}
 
 ###
 
+
+
 POST {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products
+
+Authorization bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFydW5rdW1hciIsIm5hbWVpZCI6IjBjZjhmNjJkLTA4ZDEtNGFiOC1hNWZlLTA4ZGRkNjRjYTk0NSIsIm5iZiI6MTc1NDg4ODU3NywiZXhwIjoxNzU0OTc0OTc3LCJpYXQiOjE3NTQ4ODg1NzcsImlzcyI6IkFsaWduVGVjaC5XZWJBcGkuRGF0YUZpcnN0IiwiYXVkIjoiQWxpZ25UZWNoLldlYkFwaS5EYXRhRmlyc3QifQ.n43vI_5_Aco-aYlFsFsnMQ3k0zvwCL43Sh8o9o9ZIag
+
 Content-Type: application/json
 
 {
-  "productId": "P204",
-  "productName": "Product P204",
+  "productId": "P210",
+  "productName": "Product P210",
   "categoryId": 3,
   "price": 100,
   "quantityAvailable": 1000
 }
 
 ###
+
+POST {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/auth/Login
+Content-Type: application/json
+
+{
+  "username":"arun",
+  "password":"arun@123"
+}
+
+###
+

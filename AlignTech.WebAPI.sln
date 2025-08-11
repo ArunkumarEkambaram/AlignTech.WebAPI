@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlignTech.WebAPI.Day1", "Al
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlignTech.WebAPI.DataFirst", "AlignTech.WebAPI.DataFirst\AlignTech.WebAPI.DataFirst.csproj", "{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoDataFirst.MVC", "DemoDataFirst.MVC\DemoDataFirst.MVC.csproj", "{BAF3C55E-EF22-434D-B2C7-03AF3E41B01A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBBE579D-B7F4-4EAE-B99A-5FDDCCD27D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAF3C55E-EF22-434D-B2C7-03AF3E41B01A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAF3C55E-EF22-434D-B2C7-03AF3E41B01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAF3C55E-EF22-434D-B2C7-03AF3E41B01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAF3C55E-EF22-434D-B2C7-03AF3E41B01A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,6 +18,8 @@ public partial class QuickKartDbContext : DbContext
 
     public DbSet<User>  UserTable { get; set; }
 
+    public DbSet<UserSubscription> UserSubscriptions { get; set; }
+
     public DbSet<ProductAndCategoryDto> ProductAndCategoryDto { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,0 +1,32 @@
+﻿@using DemoDataFirst.MVC.ViewModels
+@model IEnumerable<ProductViewModel>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Product Name</td>
+            <td>Category</td>
+            <td>Price</td>
+            <td>Quantity</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.CategoryName</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    fetch("https://localhost:7123/api/products")
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.error("Blocked by CORS:", err));
+</script>

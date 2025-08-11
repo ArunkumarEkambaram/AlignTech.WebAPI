@@ -25,7 +25,8 @@ namespace AlignTech.WebAPI.DataFirst.Services
                 Subject = new ClaimsIdentity(
                     new List<Claim> {
                         new Claim(ClaimTypes.Name, user.Name),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Role, user.Role)
                     }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 Issuer = _configuration["AppSettings:issuer"],
