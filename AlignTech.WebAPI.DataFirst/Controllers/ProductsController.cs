@@ -43,14 +43,18 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
         }
 
 
-        [ServiceFilter(typeof(MySubscriptionFilter))]
+        //[ServiceFilter(typeof(MySubscriptionFilter))]
+        [AllowAnonymous]
         [HttpGet]
         [Route("GetProduct/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Client, VaryByQueryKeys = ["id"])]
         public async Task<IActionResult> GetProduct(string id)
         {
             using var _ = _logger.BeginScope($"Retrieving Product Id :{id}");
+
+            _logger.LogInformation("Retrieving Product from Cache");
 
             if (id == "P100")
             {

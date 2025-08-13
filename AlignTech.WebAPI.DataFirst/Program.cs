@@ -45,6 +45,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+//Service for IMemoryCache
+builder.Services.AddMemoryCache();
+
+//Service for Respomse Cache
+builder.Services.AddResponseCaching();
 
 
 var app = builder.Build();
@@ -63,6 +68,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseResponseCaching();
 
 app.UseCors("MVCApp");
 //app.UseCors("AngularApp");
