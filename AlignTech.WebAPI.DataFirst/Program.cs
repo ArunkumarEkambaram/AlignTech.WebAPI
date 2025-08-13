@@ -9,6 +9,7 @@ builder.Services.AddControllers(options =>
 {
     //options.Filters.AddService<MySubscriptionFilter>();
     //options.Filters.AddService<PerformanceActionFilter>();
+    options.Filters.AddService<IpWishListResourceFilter>();
 });
 
 

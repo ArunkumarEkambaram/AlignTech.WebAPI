@@ -46,6 +46,13 @@ namespace AlignTech.WebAPI.DataFirst.Extensions
             services.AddScoped<MySubscriptionFilter>();
             //Register Action Filter
             services.AddScoped<PerformanceActionFilter>();
+            //Register Resource Filter
+            services.AddScoped<IpWishListResourceFilter>(opt =>
+            {
+                var allowedIps = new[] { "192.168.1.136", "192.168.1.135", "::2" };
+                var service = opt.GetRequiredService<ILogger<IpWishListResourceFilter>>();
+                return new IpWishListResourceFilter(service, allowedIps);
+            });
 
             //Authentication Scheme - JWT
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
