@@ -14,11 +14,8 @@ GET {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products/{{id}}
 
 
 POST {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/products
-
-Authorization bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFydW5rdW1hciIsIm5hbWVpZCI6IjBjZjhmNjJkLTA4ZDEtNGFiOC1hNWZlLTA4ZGRkNjRjYTk0NSIsIm5iZiI6MTc1NDg4ODU3NywiZXhwIjoxNzU0OTc0OTc3LCJpYXQiOjE3NTQ4ODg1NzcsImlzcyI6IkFsaWduVGVjaC5XZWJBcGkuRGF0YUZpcnN0IiwiYXVkIjoiQWxpZ25UZWNoLldlYkFwaS5EYXRhRmlyc3QifQ.n43vI_5_Aco-aYlFsFsnMQ3k0zvwCL43Sh8o9o9ZIag
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklkaGF5YSIsIm5hbWVpZCI6Ijk3MDEwZTA0LTI1NzgtNDlhNi1kYzVlLTA4ZGRkODI0YmYxYyIsInJvbGUiOiJzZWxsZXIiLCJuYmYiOjE3NTQ4OTIyMTcsImV4cCI6MTc1NDk3ODYxNywiaWF0IjoxNzU0ODkyMjE3LCJpc3MiOiJBbGlnblRlY2guV2ViQXBpLkRhdGFGaXJzdCIsImF1ZCI6IkFsaWduVGVjaC5XZWJBcGkuRGF0YUZpcnN0In0.I46M7Xm-Egr4X_hFVyrtT7OfuKHSR9bBFXCWwmQCB4M
 Content-Type: application/json
-
 {
   "productId": "P210",
   "productName": "Product P210",
@@ -33,8 +30,8 @@ POST {{AlignTech.WebAPI.DataFirst_HostAddress}}/api/auth/Login
 Content-Type: application/json
 
 {
-  "username":"arun",
-  "password":"arun@123"
+  "username":"idhaya",
+  "password":"idhaya@123"
 }
 
 ###

@@ -1,4 +1,5 @@
 ﻿using AlignTech.WebAPI.DataFirst.DTOs;
+using AlignTech.WebAPI.DataFirst.Filters;
 using AlignTech.WebAPI.DataFirst.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +23,7 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
             _logger = logger;
         }
 
+        [ServiceFilter(typeof(PerformanceActionFilter))]
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,12 +38,12 @@ namespace AlignTech.WebAPI.DataFirst.Controllers
                 _logger.LogWarning("There is nothing in the database to display");
                 return NotFound(new { message = "Product is empty" });
             }
-            _logger.LogInformation("Successfully retrieved all the products");
+            _logger.LogInformation($"Successfully retrieved all the products. Total Products :{products.Count()}");
             return Ok(products);
         }
 
 
-        [AllowAnonymous]
+        [ServiceFilter(typeof(MySubscriptionFilter))]
         [HttpGet]
         [Route("GetProduct/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
